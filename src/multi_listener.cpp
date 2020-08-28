@@ -1,13 +1,14 @@
-#include<ros/ros.h>
-#include<ros/callback_queue.h>
-#include<std_msgs/String.h>
+#include <ros/callback_queue.h>
+#include <ros/ros.h>
+#include <std_msgs/String.h>
 
-#include<boost/thread.hpp>
+#include <boost/thread.hpp>
 
 /**
-  * this tutorial demonstrates the use of custom sparate callback queues that can
-  * be processed independently, whether in different threads or just at different times.
-  */
+ * this tutorial demonstrates the use of custom sparate callback queues that can
+ * be processed independently, whether in different threads or just at different
+ * times.
+ */
 
 void chatterCallbackMainQueue(const std_msgs::String::ConstPtr &msg) {
   ROS_INFO_STREAM("I heard :[" << msg->data << "]in thread["
@@ -23,7 +24,8 @@ void chatterCallbackCustomQueue(const std_msgs::String::ConstPtr &msg) {
 /**
  * the custom queue used for one of the suscription callbacks
  */
-ros::CallbackQueue g_queue;/*!!!global var*/
+ros::CallbackQueue g_queue; /*!!!global var*/
+
 void callbackThread() {
 
   ROS_INFO_STREAM("Call back thread id is: " << boost::this_thread::get_id());
@@ -34,36 +36,36 @@ void callbackThread() {
   }
 }
 
-int main(int argc, char **argv){
-    ros::init(argc,argv,"multi_thread_listener");
-    ros::NodeHandle n;
+int main(int argc, char **argv) {
+  ros::init(argc, argv, "multi_thread_listener");
+  ros::NodeHandle nh;
 
-    /**
-     * The SubscribeOptions structure lets you specify a custom queue to use
-     * for a specific subscription.
-     * You can also set a default queue on a NodeHandle using the
-     * NodeHandle::setCallbackQueue() function.
-     * AdvertiseOptions and AdvertiseServiceOptions offer similar functionality.
-     */
+  /**
+   * The SubscribeOptions structure lets you specify a custom queue to use
+   * for a specific subscription.
+   * You can also set a default queue on a NodeHandle using the
+   * NodeHandle::setCallbackQueue() function.
+   * AdvertiseOptions and AdvertiseServiceOptions offer similar functionality.
+   */
 
-    ros::SubscribeOptions ops = ros::SubscribeOptions::create<std_msgs::String>(
-        "/multi_thread/chatter", 10, chatterCallbackCustomQueue, ros::VoidPtr(),
-        &g_queue);
+  ros::SubscribeOptions ops = ros::SubscribeOptions::create<std_msgs::String>(
+      "/multi_thread/chatter", 10, chatterCallbackCustomQueue, ros::VoidPtr(),
+      &g_queue);
 
-    ros::Subscriber sub = n.subscribe(ops);
-    ros::Subscriber sub2 =
-        n.subscribe("/multi_thread/chatter", 10, chatterCallbackMainQueue);
+  ros::Subscriber sub = nh.subscribe(ops);
+  ros::Subscriber sub2 =
+      nh.subscribe("/multi_thread/chatter", 10, chatterCallbackMainQueue);
 
-    boost::thread chatter_thread(callbackThread);
+  boost::thread chatter_thread(callbackThread);
 
-    ROS_INFO_STREAM("Main thread id=" << boost::this_thread::get_id());
+  ROS_INFO_STREAM("Main thread id=" << boost::this_thread::get_id());
 
-    ros::Rate r(1);
+  ros::Rate r(1);
 
-    while (n.ok()) {
-      ros::spinOnce();
-      r.sleep();
-    }
+  while (nh.ok()) {
+    ros::spinOnce();
+    r.sleep();
+  }
 
-    chatter_thread.join();
+  chatter_thread.join();
 }

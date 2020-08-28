@@ -136,6 +136,7 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/multi_thread_node.cpp)
 add_executable(${PROJECT_NAME}_talker src/multi_talker.cpp)
 add_executable(${PROJECT_NAME}_listener src/multi_listener.cpp)
+add_executable(${PROJECT_NAME}_listener_test src/multi_listener_test.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -156,6 +157,9 @@ target_link_libraries(${PROJECT_NAME}_talker
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_listener_test
   ${catkin_LIBRARIES}
 )
 #############
