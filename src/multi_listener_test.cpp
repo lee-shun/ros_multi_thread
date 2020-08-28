@@ -60,5 +60,5 @@ int main(int argc, char **argv) {
     rate.sleep();
   }
 
-  chatter_thread.join();
+  /* chatter_thread.join(); */
 }
