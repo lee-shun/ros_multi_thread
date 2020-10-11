@@ -135,9 +135,14 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/multi_thread_node.cpp)
 add_executable(${PROJECT_NAME}_talker src/multi_talker.cpp)
+
 add_executable(${PROJECT_NAME}_listener src/multi_listener.cpp)
+
 add_executable(${PROJECT_NAME}_listener_test src/multi_listener_test.cpp)
 
+add_executable(${PROJECT_NAME}_listenner_multi_func src/listenner_multi_func.cpp)
+
+add_executable(${PROJECT_NAME}_listener_multi_thread src/listener_multi_thread.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -160,6 +165,12 @@ target_link_libraries(${PROJECT_NAME}_listener
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_listenner_multi_func
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_listener_multi_thread
   ${catkin_LIBRARIES}
 )
 #############
